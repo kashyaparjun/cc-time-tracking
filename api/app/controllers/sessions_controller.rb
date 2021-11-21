@@ -80,7 +80,7 @@ class SessionsController < ApplicationController
             # Calculating time difference between the UI and server (Both times in UTC)
             diff = (DateTime.now.utc - Time.parse(session_params["end"]))/60
 
-            # Check for time validity
+            # Check for time validity, reject if time difference between server and UI is greater than 5 mins
             if session_params["end"] < session["start"] or session_params["end"] < session["end"] \
                 or session_params["end"] > DateTime.now.utc or diff > 5
                 return render(
@@ -116,7 +116,7 @@ class SessionsController < ApplicationController
             # Calculating time difference between the UI and server (Both times in UTC)
             diff = (DateTime.now.utc - Time.parse(session_params["start"]))/60
 
-            # If the UI time in UTC is greater than server or is lesser than 5 mins, reject request
+            # If the UI time in UTC is greater than server or is greater than 5 mins, reject request
             if session_params["start"] > DateTime.now.utc or diff > 5
                 return render(
                     json: { success: false, errors: "Invalid start time" },
