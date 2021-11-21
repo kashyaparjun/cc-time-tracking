@@ -20,17 +20,21 @@ const TaskSubmit = (props) => {
   const PING_INTERVAL = 60000;
   let timer = React.useRef();
 
-  React.useEffect(() => {
-    window.addEventListener('focus', onFocus);
-    window.addEventListener('blur', onBlur);
+  React.useEffect(
+    () => {
+      window.addEventListener('focus', onFocus);
+      window.addEventListener('blur', onBlur);
 
-    loadCurrentTask();
+      loadCurrentTask();
 
-    return () => {
-      window.removeEventListener('focus', onFocus);
-      window.removeEventListener('blur', onBlur);
-    };
-  }, [taskId]);
+      return () => {
+        window.removeEventListener('focus', onFocus);
+        window.removeEventListener('blur', onBlur);
+      };
+    },
+    // eslint-disable-next-line
+    [taskId]
+  );
 
   React.useEffect(() => {
     if (sessionId) {
@@ -46,13 +50,17 @@ const TaskSubmit = (props) => {
     };
   }, [sessionId, taskId]);
 
-  React.useEffect(() => {
-    if (inFocus && task && !task.submitted) {
-      startSession();
-    } else if (!inFocus) {
-      setSessionId(null);
-    }
-  }, [inFocus, task]);
+  React.useEffect(
+    () => {
+      if (inFocus && task && !task.submitted) {
+        startSession();
+      } else if (!inFocus) {
+        setSessionId(null);
+      }
+    },
+    // eslint-disable-next-line
+    [inFocus, task]
+  );
 
   const startSession = React.useCallback(() => {
     (async () => {
@@ -65,21 +73,29 @@ const TaskSubmit = (props) => {
     })();
   }, [taskId]);
 
-  const loadCurrentTask = React.useCallback(() => {
-    (async () => {
-      const response = await fetch(`${getUrl('TASKS_BASE_URL')}/${taskId}`);
-      const result = await response.json();
+  const loadCurrentTask = React.useCallback(
+    () => {
+      (async () => {
+        const response = await fetch(`${getUrl('TASKS_BASE_URL')}/${taskId}`);
+        const result = await response.json();
 
-      const session = await getSessionDataForTask(taskId);
-      if (session.success) {
-        setSession(session.data[0]);
-      } else {
-        setErrors(session.errors);
-      }
+        await setStats();
 
-      setTask(result.data);
-    })();
-  }, [taskId, setTask, setSession, setErrors]);
+        setTask(result.data);
+      })();
+    },
+    // eslint-disable-next-line
+    [taskId, setTask, setSession, setErrors]
+  );
+
+  const setStats = async () => {
+    const session = await getSessionDataForTask(taskId);
+    if (session.success) {
+      setSession(session.data[0]);
+    } else {
+      setErrors(session.errors);
+    }
+  };
 
   const onFocus = () => {
     setInFocus(true);
@@ -109,12 +125,7 @@ const TaskSubmit = (props) => {
         const result = await response.json();
 
         if (result.success) {
-          const session = await getSessionDataForTask(taskId);
-          if (session.success) {
-            setSession(session.data[0]);
-          } else {
-            setErrors(session.errors);
-          }
+          await setStats();
           setTask(result.data);
         } else {
           setErrors(JSON.stringify(result.errors));
@@ -124,6 +135,7 @@ const TaskSubmit = (props) => {
         setIsSubmitting(false);
       })();
     },
+    // eslint-disable-next-line
     [taskId, answer, startSession, setSessionId, setTask, setErrors, setSession]
   );
 
