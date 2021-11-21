@@ -58,7 +58,7 @@ class SessionsController < ApplicationController
             return render(json: { success: false, errors: "Session not found" }) \
                 if sessions.blank?
 
-            render json: { success: true, sessions: sessions.map{ |e| mapper(e) } }
+            render json: { success: true, data: sessions.map{ |e| mapper(e) } }
 
         rescue => exception
             log_error("Sessions#show", exception.message)
