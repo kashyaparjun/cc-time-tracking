@@ -36,3 +36,37 @@
     transform: rotate(360deg);
   }
 }
+
+.session-area-task {
+  width: 100%;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.flex {
+  display: flex;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.px-10 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.justify-end {
+  justify-content: end;
+}
