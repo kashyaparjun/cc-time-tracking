@@ -12,11 +12,35 @@ ben = User.create(
   lastname: 'Utzermann'
 )
 
-Task.create(
+task1 = Task.create(
   instructions: 'Write an autobiography about Marie Curie.',
   user: ben
 )
-Task.create(
+
+task2 = Task.create(
   instructions: 'Write an autobiography about Rosalind Franklin.',
   user: ben
 )
+
+Session.create(
+  user: ben,
+  task: task1,
+  start: DateTime.now.utc,
+  end: DateTime.now.utc + 20.minutes
+)
+
+Session.create(
+  user: ben,
+  task: task1,
+  start: DateTime.now.utc,
+  end: DateTime.now.utc + 10.minutes
+)
+
+Session.create(
+  user: ben,
+  task: task2,
+  start: DateTime.now.utc,
+  end: DateTime.now.utc + 5.minutes
+)
+
+

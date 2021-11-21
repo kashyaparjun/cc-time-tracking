@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_15_172935) do
+ActiveRecord::Schema.define(version: 2021_11_21_082243) do
+
+  create_table "sessions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "task_id"
+    t.datetime "start", null: false
+    t.datetime "end", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_sessions_on_task_id"
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
 
   create_table "tasks", force: :cascade do |t|
     t.string "instructions", null: false

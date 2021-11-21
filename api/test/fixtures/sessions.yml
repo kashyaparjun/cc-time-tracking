@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  task: one
+  start: 2021-11-21 13:52:43
+  end: 2021-11-21 13:52:43
+
+two:
+  user: two
+  task: two
+  start: 2021-11-21 13:52:43
+  end: 2021-11-21 13:52:43
