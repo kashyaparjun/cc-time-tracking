@@ -1,3 +1,5 @@
+require 'time';
+
 class SessionsController < ApplicationController
     include SessionsHelper
     include ApplicationHelper
@@ -75,7 +77,12 @@ class SessionsController < ApplicationController
                 )
             end
 
-            if session_params["end"] < session["start"] or session_params["end"] < session["end"]
+            # Calculating time difference between the UI and server (Both times in UTC)
+            diff = (DateTime.now.utc - Time.parse(session_params["end"]))/60
+
+            # Check for time validity
+            if session_params["end"] < session["start"] or session_params["end"] < session["end"] \
+                or session_params["end"] > DateTime.now.utc or diff > 5
                 return render(
                     json: { success: false, errors: "Invalid end time" },
                     status: 403
@@ -105,6 +112,17 @@ class SessionsController < ApplicationController
 
             return render(json: { success: false, errors: "Task doesn't exist" }, status: 403) \
                 if task.nil?
+            
+            # Calculating time difference between the UI and server (Both times in UTC)
+            diff = (DateTime.now.utc - Time.parse(session_params["start"]))/60
+
+            # If the UI time in UTC is greater than server or is lesser than 5 mins, reject request
+            if session_params["start"] > DateTime.now.utc or diff > 5
+                return render(
+                    json: { success: false, errors: "Invalid start time" },
+                    start: 403
+                )
+            end
             
             session = Session.create(
                 user_id: user_id,
